@@ -310,6 +310,9 @@ class TransactionService {
 			 */
 			$orderEntity               = $this->getOrderEntity($orderId, $context);
 			$orderDeliveryStateHandler = $this->container->get(OrderDeliveryStateHandler::class);
+			if (null !== $orderEntity->getDeliveries()->last()) {
+                            $orderDeliveryStateHandler->hold($orderEntity->getDeliveries()->last()->getId(), $context);
+                        }
 			$orderDeliveryStateHandler->hold($orderEntity->getDeliveries()->last()->getId(), $context);
 		} catch (\Exception $exception) {
 			$this->logger->critical($exception->getTraceAsString());
